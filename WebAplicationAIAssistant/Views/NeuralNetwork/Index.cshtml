@@ -1,0 +1,59 @@
+@model List<WebAplicationAIAssistant.Models.LevelInfo>
+@{
+    ViewData["Title"] = "Обучение Нейросети";
+}
+
+<div class="hero-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h1 class="display-4 main-title">🧠 Изучаем Нейросети!</h1>
+            <p class="lead intro-text">Научи свою нейросеть принимать решения о покупках!</p>
+            <p class="intro-description">Подбирай веса (W1, W2, W3...) так, чтобы нейросеть правильно решала, покупать товар или нет.</p>
+        </div>
+
+        <div class="row g-4">
+            @foreach (var level in Model)
+            {
+                <div class="col-md-4">
+                    <div class="level-card">
+                        <div class="level-badge">Уровень @level.LevelNumber</div>
+                        <h3 class="level-title">@level.Title</h3>
+                        <p class="level-description">@level.Description</p>
+                        <div class="level-product">
+                            <strong>Товар:</strong> @level.ProductName
+                        </div>
+                        <div class="level-factors">
+                            <strong>Факторы:</strong>
+                            <ul class="factors-list">
+                                @foreach (var label in level.InputLabels)
+                                {
+                                    <li>@label</li>
+                                }
+                            </ul>
+                        </div>
+                        <div class="level-function">
+                            <strong>Функция активации:</strong>
+                            <div class="function-name">@level.ActivationFunctionName</div>
+                            <div class="scientific-name">@level.ScientificName</div>
+                        </div>
+                        <a asp-action="Train" asp-route-level="@level.LevelNumber" class="btn btn-primary btn-level">
+                            Начать обучение →
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="info-box mt-5">
+            <h4>📚 Как это работает?</h4>
+            <p><strong>Обозначения переменных:</strong></p>
+            <ul class="notation-list">
+                <li><strong>X₁, X₂, X₃...</strong> - входные данные (input features, признаки) - факторы решения</li>
+                <li><strong>W₁, W₂, W₃...</strong> - веса (weights) - параметры, которые ты настраиваешь</li>
+                <li><strong>S</strong> - взвешенная сумма (weighted sum, активация)</li>
+                <li><strong>y</strong> - выход нейросети (output) - результат решения</li>
+            </ul>
+            <p>Каждый уровень использует свою функцию активации. Твоя задача - подобрать правильные веса, чтобы для всех комбинаций факторов нейросеть давала правильный ответ!</p>
+        </div>
+    </div>
+</div>

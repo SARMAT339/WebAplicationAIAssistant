@@ -1,0 +1,100 @@
+@model WebAplicationAIAssistant.Models.NeuralNetworkModel
+@{
+    ViewData["Title"] = $"Обучение - {Model.ProductName}";
+}
+
+<div class="train-container">
+    <div class="container">
+        <div class="train-header">
+            <a asp-action="Index" class="back-link">← Вернуться к уровням</a>
+            <h1 class="train-title">🎮 Обучение: @Model.ProductName</h1>
+            <p class="train-subtitle">Подбери правильные веса для нейросети!</p>
+        </div>
+
+        <div class="explanation-panel mb-4">
+            <h3>📖 Объяснение функции активации</h3>
+            <div class="function-info">
+                <div class="function-header">
+                    <h4>@Model.ActivationFunctionName</h4>
+                    <div class="scientific-name-badge">@Model.ScientificName</div>
+                </div>
+                <div class="function-formula">
+                    <pre>@Model.ActivationFunctionFormula</pre>
+                </div>
+                <div class="function-explanation">
+                    <p><strong>Как это работает:</strong></p>
+                    <p>@Model.ActivationFunctionDescription</p>
+                    <p><strong>Подробное объяснение:</strong></p>
+                    <p>@Model.Explanation</p>
+                </div>
+                <div class="variable-notation">
+                    <strong>Обозначения переменных:</strong>
+                    <ul>
+                        <li><strong>X₁, X₂, X₃...</strong> - входные данные (input features, признаки)</li>
+                        <li><strong>W₁, W₂, W₃...</strong> - веса (weights) - параметры для настройки</li>
+                        <li><strong>S</strong> - взвешенная сумма (weighted sum, активация)</li>
+                        <li><strong>y</strong> - выход нейросети (output)</li>
+                        @if (Model.Level == 3)
+                        {
+                            <li><strong>·</strong> - знак умножения</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="control-panel">
+                    <h3>⚙️ Управление весами</h3>
+                    <div id="weights-container">
+                        @for (int i = 0; i < Model.InputLabels.Count; i++)
+                        {
+                            <div class="weight-control">
+                                <label class="weight-label">
+                                    <strong>@Model.InputLabels[i]</strong><br>
+                                    <span class="weight-name">W@(i+1)</span>
+                                </label>
+                                <div class="slider-container">
+                                    <input type="range" 
+                                           class="weight-slider" 
+                                           data-index="@i"
+                                           min="-5" 
+                                           max="5" 
+                                           step="0.1" 
+                                           value="0"
+                                           id="weight-@i">
+                                    <span class="weight-value" id="value-@i">0.0</span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="button-group">
+                        <button id="test-btn" class="btn btn-test">🧪 Проверить нейросеть</button>
+                        <button id="reset-btn" class="btn btn-reset">🔄 Сбросить</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="results-panel">
+                    <h3>📊 Результаты тестирования</h3>
+                    <div id="results-container">
+                        <div class="results-placeholder">
+                            <p>Измени веса и нажми "Проверить нейросеть" для тестирования</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="level-data" 
+     data-level="@Model.Level" 
+     data-input-count="@Model.InputLabels.Count"
+     style="display: none;"></div>
+
+@section Scripts {
+    <script src="~/js/neural-network.js" asp-append-version="true"></script>
+}
